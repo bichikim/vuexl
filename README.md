@@ -7,7 +7,7 @@
 ```javascript
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {setLocalStore, mapLocalActions} from './'
+import {setLocalStore, mapLocalActions, mapLocalGetters, mapLocalGetters, mapLocalGetters} from './'
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {}
@@ -18,7 +18,7 @@ const component = new Vue(setLocalStore(
     methods: {
       ...mapLocalActions({
         increase: 'increase'
-      })
+      }),
     }
   }, // vue
   {
@@ -40,10 +40,11 @@ const component = new Vue(setLocalStore(
 ```
 ### Vuexl decorators
 ```typescript
-import {Component, Prop, Vue} from 'vue-property-decorator'
+import Vue from 'vue'
+import {Component, Prop} from 'vue-property-decorator'
 import {LocalAction, LocalStore, LocalState, LocalMutaion, LocalGetter} from './'
 @Component
-export default class VuexlComponent extends  Vue {
+export default class VuexlComponent extends Vue {
   @LocalState value: number
   @LocalGetter opposite: number
   @LocalMutaion('increase') mutIncrease: () => void
@@ -70,9 +71,11 @@ export default class VuexlComponent extends  Vue {
 ```
 ### Options
 - localName
+
+### Options.localName
 >in case of having localName
 ```javascript
-const store = {
+const state = {
   // ... something
   localName: {
     // ... your local store be here
@@ -81,7 +84,7 @@ const store = {
 ```
 > not having localName
 ```javascript
-const store = {
+const state = {
   // ... something
   // ... your local store be here
 }
