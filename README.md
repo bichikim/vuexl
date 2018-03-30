@@ -25,7 +25,7 @@ const component = new Vue(setLocalStore(
     },
     computed: {
       ...mapLocalGetters({
-        value: 'oppositeValue'
+        oValue: 'oppositeValue'
       }),
       ...mapLocalState({
         value: 'value'
