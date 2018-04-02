@@ -1,0 +1,17 @@
+const vuexl = require('../../dist/app')
+const {expect} = require('chai')
+describe('sulleong', () => {
+  it('has all members', () => {
+    expect(vuexl.default.install).to.be.a('function')
+    expect(vuexl.LocalAction).to.be.a('function')
+    expect(vuexl.LocalGetter).to.be.a('function')
+    expect(vuexl.LocalMutation).to.be.a('function')
+    expect(vuexl.LocalState).to.be.a('function')
+    expect(vuexl.LocalStore).to.be.a('function')
+    expect(vuexl.mapLocalActions).to.be.a('function')
+    expect(vuexl.mapLocalGetters).to.be.a('function')
+    expect(vuexl.mapLocalMutations).to.be.a('function')
+    expect(vuexl.mapLocalState).to.be.a('function')
+    expect(vuexl.setLocalStore).to.be.a('function')
+  })
+})
