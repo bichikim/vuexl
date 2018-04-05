@@ -26,3 +26,13 @@ export type TMutationGetter = (commit: Commit, ...args: any[]) => any | string
 export type TActionGetter = string
 
 export type TGetterGetter = string
+
+export interface IPluginOptions {
+  name?: string
+}
+
+export interface ISetStateResult {
+  store: Store<any>
+  name?: string
+  options?: ISetModuleNameOptions
+}

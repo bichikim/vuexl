@@ -11,6 +11,7 @@ import {
 export const sLocalStoreName =  Symbol('localStoreName')
 export const sLocalStoreChannelName = Symbol('localStoreChannel')
 export const sConnectedLocalStoreName = Symbol('connectedLocalStoreName')
+export const sIsSharedLocalStore = Symbol('isSharedLocalStore')
 const INIT_NUMBER = 0, MAP_STATE = 'mapState', MAP_MUTATIONS = 'mapMutations'
 const MAP_ACTIONS = 'mapActions'
 const nameCounter: INameCounter = {}
@@ -72,12 +73,14 @@ export const setModule = (
 ): void => {
   // $isServer is for Nuxt
   const {$store = null, $isServer = false} = vm
+  const {isUsingSameStore = false} = options
   if(!$store || $isServer){return}
   const localChannelName: string | undefined = getChannelName(vm)
   const localName: string = getName(vm, localStoreName, options)
   // k
   confirmChannel(vm, localChannelName)
   vm[sLocalStoreName] = localName
+  vm[sIsSharedLocalStore] = isUsingSameStore
   if(isLocalStore($store, localName, localChannelName)){return}
   $store.registerModule(
     localChannelName ? [localChannelName, localName]: [localName],
