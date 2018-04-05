@@ -1,9 +1,12 @@
 import {forEach} from 'lodash'
+import {ISetLocalStoreOptions} from './type'
 import {
-  localActionFactory, localGetterFactory, localMutationFactory, localStateFactory,
-} from './decorators'
-import {ILocalStoreOptions} from './type'
-import {setModule} from './util'
+  getLocalActionGetter,
+  getLocalGetterGetter,
+  getLocalMutationGetter,
+  getLocalStateGetter,
+  setModule,
+} from './util'
 
 // eslint-disable-next-line func-style
 function mapFactory(maps, runner) {
@@ -15,32 +18,32 @@ function mapFactory(maps, runner) {
 }
 // tslint:disable-next-line: only-arrow-functions
 export const mapLocalActions = function(maps: any) {
-  return mapFactory(maps, localActionFactory)
+  return mapFactory(maps, getLocalActionGetter)
 }
 
 // tslint:disable-next-line: only-arrow-functions
 export const mapLocalGetters = function(maps: any) {
-  return mapFactory(maps, localGetterFactory)
+  return mapFactory(maps, getLocalGetterGetter)
 }
 
 // tslint:disable-next-line: only-arrow-functions
 export const mapLocalMutations = function(maps: any) {
-  return mapFactory(maps, localMutationFactory)
+  return mapFactory(maps, getLocalMutationGetter)
 }
 
 // tslint:disable-next-line: only-arrow-functions
 export const mapLocalState = function(maps: any) {
-  return mapFactory(maps, localStateFactory)
+  return mapFactory(maps, getLocalStateGetter)
 }
 
 export const setLocalStore = (
-  targetVue: any, store: any, options: ILocalStoreOptions = {},
+  targetVue: any, store: any, options: ISetLocalStoreOptions = {},
 ): any => {
   return {
     extends: targetVue,
     beforeCreate() {
       const {name} = options
-      setModule.call(this, store, name, options)
+      setModule(this, store, name, options)
     },
   }
 }

@@ -7,6 +7,10 @@ export interface ISetModuleNameOptions {
   numberingSeparator?: string
 }
 
+export interface ISetLocalStoreOptions extends ISetModuleNameOptions{
+  name?: string
+}
+
 export interface IStoreVue<S> extends Vue {
   $store: Store<S>
 }
