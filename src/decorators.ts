@@ -5,7 +5,6 @@ import {
   getLocalMutationGetter,
   getLocalStateGetter,
 } from './module'
-import {registerLocal} from './register'
 import {ISetModuleNameOptions} from './type'
 
 // eslint-disable-next-line func-style
@@ -15,13 +14,16 @@ export function LocalStore(
   ): any {
   // tslint:disable-next-line
   return function(target: any, key: string) {
-    const targetBeforeCreate = target.beforeCreate
-    Object.defineProperty(target, 'beforeCreate', {
+    if(target.localStore){
+      throw new Error('[vuexl] omg')
+    }
+    Object.defineProperty(target, '$localStore', {
       // tslint:disable-next-line
       value: function() {
-        registerLocal(this, _store, key, options)
-        if(isFunction(targetBeforeCreate)){
-          targetBeforeCreate.call(target)
+        return {
+          name: key,
+          store: _store,
+          options,
         }
       },
     })

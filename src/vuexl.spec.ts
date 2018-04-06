@@ -4,9 +4,10 @@ import {expect} from 'chai'
 import {Component, Vue} from 'vue-property-decorator'
 import Vuex from 'vuex'
 import Vuexl, {
-  LocalAction, LocalGetter, LocalMutation, LocalState,
-  LocalStore, mapLocalActions, mapLocalGetters, mapLocalMutations,
-  mapLocalState, setLocalStore, sLocalStoreStatus,
+  Component as LComponent, LocalAction, LocalGetter, LocalMutation,
+  LocalState, LocalStore, mapLocalActions, mapLocalGetters,
+  mapLocalMutations, mapLocalState, setLocalStore,
+  sLocalStoreStatus,
 } from './index'
 
 describe('vuexl', () => {
@@ -151,6 +152,7 @@ describe('vuexl', () => {
       })
     })
     it('can set LocalStore', () => {
+      // tslint:disable-next-line: max-classes-per-file
       @Component
       class VuexlComponent extends Vue {
         @LocalState('value') foo: number
@@ -160,6 +162,30 @@ describe('vuexl', () => {
             value: 1,
           },
         }) vuexlTest: string
+      }
+
+      const wrapper = shallow(VuexlComponent, {store, localVue})
+
+      expect(wrapper.vm.foo).to.equal(1)
+      expect(wrapper.vm[sLocalStoreStatus].localName).to.equal('vuexlTest-0')
+    })
+
+    it('can set LocalStore: without decoration', () => {
+      // tslint:disable-next-line: max-classes-per-file
+      @LComponent({
+        localStore() {
+          return {
+            store: {
+              state: {
+                value: 1,
+              },
+            },
+            name: 'vuexlTest',
+          }
+        },
+      })
+      class VuexlComponent extends Vue {
+        @LocalState('value') foo: number
       }
 
       const wrapper = shallow(VuexlComponent, {store, localVue})

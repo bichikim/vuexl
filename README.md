@@ -54,6 +54,59 @@ const component = new Vue(setLocalStore(
   } // store
 ))
 ```
+### Vuexl helpers
+```javascript
+import Vue from 'vue'
+import Vuex from 'vuex'
+import {setLocalStore, mapLocalActions, mapLocalGetters, mapLocalState, mapLocalMutations} from './'
+Vue.use(Vuex)
+const store = new Vuex.Store({
+  state: {}
+})
+const component = new Vue({
+  store,
+  localStore() {
+    return {
+      store: {
+        state: {
+          value: 1,
+        },
+        actions: {
+          increase({commit}) {
+            commit('increase')
+          }
+        },
+        getters: {
+          oppositeValue(state){
+            return state.value * -1
+          }
+        }
+        mutations: {
+          increase(state) {
+            state.value += 1
+          }
+        }
+      }
+    }
+  },
+  methods: {
+    ...mapLocalActions({
+      increase: 'increase'
+    }),
+    ...mapLocalMutations({
+      mIncrease: 'increase'
+    }),
+  },
+  computed: {
+    ...mapLocalGetters({
+      oValue: 'oppositeValue'
+    }),
+    ...mapLocalState({
+      value: 'value'
+    }),
+  }
+})
+```
 ### Vuexl decorators
 ```typescript
 import Vue from 'vue'

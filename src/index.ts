@@ -1,4 +1,7 @@
 import {isFunction} from 'lodash'
+import Vue, {ComponentOptions} from 'vue'
+import vueComponent from 'vue-class-component'
+import {Module} from 'vuex'
 import {LocalAction, LocalGetter, LocalMutation, LocalState, LocalStore} from './decorators'
 import {
   mapLocalActions, mapLocalGetters, mapLocalMutations, mapLocalState, setLocalStore,
@@ -81,9 +84,10 @@ export default {
     vue.prototype[sLocalStoreCounter] = {}
     vue.mixin({
       created() {
-        const {$options: {localStore}, $store} = this
-        if(!isFunction(localStore) || !$store){return}
-        const data: ISetStateResult = localStore.call(this)
+        const {$options: {localStore}, $store, $localStore} = this
+        const myLocalStore = localStore || $localStore
+        if(!isFunction(myLocalStore) || !$store){return}
+        const data: ISetStateResult = myLocalStore.call(this)
         registerLocal(this, data.store, data.name, data.options)
       },
       beforeDestroy() {
@@ -91,4 +95,16 @@ export default {
       },
     })
   },
+}
+interface IVuexlComponentOptions extends ComponentOptions<Vue>{
+  localStore: () => {
+    store: Module<any, any>,
+    name?: string,
+    options?: ISetLocalStoreOptions,
+  }
+}
+
+// eslint-disable-next-line func-style
+export function Component(options: IVuexlComponentOptions) {
+  return vueComponent(options as ComponentOptions<Vue>)
 }
