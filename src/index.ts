@@ -84,9 +84,9 @@ export default {
     vue.prototype[sLocalStoreCounter] = {}
     vue.mixin({
       created() {
-        const {$options: {localStore}, $store, $localStore} = this
+        const {$options: {localStore}, $localStore} = this
         const myLocalStore = localStore || $localStore
-        if(!isFunction(myLocalStore) || !$store){return}
+        if(!isFunction(myLocalStore)){return}
         const data: ISetStateResult = myLocalStore.call(this)
         registerLocal(this, data.store, data.name, data.options)
       },
