@@ -147,23 +147,8 @@ export default class VuexlComponent extends Vue {
 ### Options
 - localName
 
-### Options.localName
+### Options.name
 >in case of having localName
-```javascript
-const state = {
-  // ... something
-  localName: {
-    // ... your local store be here
-  }
-}
-```
-> not having localName
-```javascript
-const state = {
-  // ... something
-  // ... your local store be here
-}
-```
 > way to use
 ```javascript
 import Vue from 'vue'
