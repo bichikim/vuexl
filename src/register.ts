@@ -1,9 +1,9 @@
-import {getNameSpace} from '@/module'
-import {sLocalStoreCounter, sLocalStoreStatus} from '@/symbols'
-import {ILocalStoreOptions, ISetModuleNameOptions, IStoreVue} from '@/type'
-import {getChannelName, getLocalStoreName, getLocalStoreState} from '@/util'
 import {cloneDeep, isNil} from 'lodash'
 import {Module, Store} from 'vuex'
+import {getNameSpace} from './module'
+import {sLocalStoreCounter, sLocalStoreStatus} from './symbols'
+import {ILocalStoreOptions, ISetModuleNameOptions, IStoreVue} from './type'
+import {getChannelName, getLocalStoreName, getLocalStoreState} from './util'
 const INIT_NUMBER = 0
 export const getNameNumber = (
   vm: IStoreVue<any>,
@@ -91,10 +91,10 @@ export const registerLocal = (
 }
 
 export const unregisterLocal = (vm: IStoreVue<any>) => {
-  const {$store} = vm
+  const {$store, $isServer} = vm
   const localStoreStatus = getLocalStoreState(vm)
   const {localName, isUsingSameStore, name} = localStoreStatus
-  if(!$store || !localName){return}
+  if(!$store || !$isServer || !localName){return}
   const decrease = -1
   const count: number = getNameNumber(vm, name, decrease)
   if(!isUsingSameStore || count < 0){
