@@ -11,6 +11,11 @@ export interface ISetLocalStoreOptions extends ISetModuleNameOptions{
   name?: string
 }
 
+export interface ILocalStoreOptions extends ISetLocalStoreOptions{
+  localName?: string,
+  localConnectedName?: string,
+}
+
 export interface IStoreVue<S> extends Vue {
   $store: Store<S>
 }

@@ -10,6 +10,7 @@ const WebpackMerge = require('webpack-merge')
 WebpackBaseConfig.entry = null
 module.exports = WebpackMerge(WebpackBaseConfig, {
   devtool: 'inline-source-map',
+  mode: 'development',
   module: {
     rules: [
       {

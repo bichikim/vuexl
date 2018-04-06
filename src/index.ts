@@ -1,9 +1,22 @@
 import {isFunction} from 'lodash'
-import Vue from 'vue'
 import {LocalAction, LocalGetter, LocalMutation, LocalState, LocalStore} from './decorators'
 import {
   mapLocalActions, mapLocalGetters, mapLocalMutations, mapLocalState, setLocalStore,
 } from './map-helper'
+import {
+  getLocalActionGetter,
+  getLocalGetterGetter,
+  getLocalMutationGetter,
+  getLocalStateGetter,
+  getModuleByNameSpace,
+  getNameSpace,
+} from './module'
+import {registerLocal, unregisterLocal} from './register'
+import {
+  sLocalStoreChannelName,
+  sLocalStoreCounter,
+  sLocalStoreStatus,
+} from './symbols'
 import {
   INameCounter,
   IPluginOptions,
@@ -16,17 +29,11 @@ import {
   TMutationGetter,
   TStateGetter,
 } from './type'
-import {
-  findLocalStoreName,
-  getChannelName,
-  getNameSpace,
-  sConnectedLocalStoreName,
-  setModule,
-  sIsSharedLocalStore,
+export {
+  sLocalStoreStatus,
   sLocalStoreChannelName,
-  sLocalStoreName,
-} from './util'
-export {sLocalStoreName, sLocalStoreChannelName, sConnectedLocalStoreName}
+  sLocalStoreCounter,
+}
 export {
   INameCounter,
   IPluginOptions,
@@ -37,6 +44,14 @@ export {
   TGetterGetter,
   TMutationGetter,
   TStateGetter,
+}
+export {
+  getNameSpace,
+  getLocalMutationGetter,
+  getLocalActionGetter,
+  getLocalGetterGetter,
+  getModuleByNameSpace,
+  getLocalStateGetter,
 }
 export {
   LocalState,
@@ -53,31 +68,26 @@ export {
   setLocalStore,
 }
 
-let _Vue: Vue
+// let _Vue: Vue
 // noinspection JSUnusedGlobalSymbols
 export default {
   install(vue, options: IPluginOptions = {}) {
     const {name} = options
-    if(_Vue){
-      throw new Error('[Vuexl install] already installed')
-    }
-    _Vue = vue
+    // if(_Vue){
+    //   throw new Error('[Vuexl install] already installed')
+    // }
+    // _Vue = vue
     vue.prototype[sLocalStoreChannelName] = name
+    vue.prototype[sLocalStoreCounter] = {}
     vue.mixin({
       created() {
         const {$options: {localStore}, $store} = this
         if(!isFunction(localStore) || !$store){return}
         const data: ISetStateResult = localStore.call(this)
-        setModule(this, data.store, data.name, data.options)
+        registerLocal(this, data.store, data.name, data.options)
       },
       beforeDestroy() {
-        const {$store} = this
-        const localName: string = this[sLocalStoreName]
-        const isSharedLocalStore: boolean = this[sIsSharedLocalStore]
-        if(!$store || !localName || isSharedLocalStore){return}
-        const localStoreName: string = findLocalStoreName(this)
-        const localStoreChannelName: string = getChannelName(this)
-        $store.unregister(getNameSpace(localStoreName, localStoreChannelName))
+        unregisterLocal(this)
       },
     })
   },

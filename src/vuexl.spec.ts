@@ -6,22 +6,26 @@ import Vuex from 'vuex'
 import Vuexl, {
   LocalAction, LocalGetter, LocalMutation, LocalState,
   LocalStore, mapLocalActions, mapLocalGetters, mapLocalMutations,
-  mapLocalState, setLocalStore, sLocalStore,
+  mapLocalState, setLocalStore, sLocalStoreStatus,
 } from './index'
 
 describe('vuexl', () => {
   let store
   let wrapper
   describe('vuexl: object way', () => {
-    const makeComponent = (options: {name?, optionsName?, isKeyName?, share?, localName?} = {}) => {
+    const makeComponent = (
+        options: {name?, optionsName?, isUsingName?, isUsingSameStore?, localName?} = {},
+      ) => {
       const localVue = createLocalVue()
       localVue.use(Vuex)
-      const {name, optionsName, isKeyName, share, localName} = options
+      localVue.use(Vuexl)
+      const {name, optionsName, isUsingName, isUsingSameStore, localName} = options
       localVue.use(Vuexl, {localName})
       return shallow(setLocalStore(
         {
           name,
           store,
+          template: `<div>~</div>`,
           computed: {
             ...mapLocalState({
               value: (state) => (state.value),
@@ -61,8 +65,8 @@ describe('vuexl', () => {
         },
         {
           name: optionsName,
-          isKeyName,
-          share,
+          isUsingName,
+          isUsingSameStore,
         },
       ), {localVue})
     }
@@ -80,22 +84,38 @@ describe('vuexl', () => {
       expect(store.state['name-0']).to.be.an('object')
     })
     it('can set LocalStore: has name options', () => {
-      wrapper = makeComponent({name: 'name', optionsName: 'option'})
+      wrapper = makeComponent({
+        name: 'name',
+        optionsName: 'option',
+      })
       expect(store.state['option-0']).to.be.an('object')
     })
     it('can set LocalStore: force use component name', () => {
-      wrapper = makeComponent({name: 'name', optionsName: 'option', isKeyName: false})
+      wrapper = makeComponent({
+        name: 'name',
+        optionsName: 'option',
+        isUsingName: false,
+      })
       expect(store.state['name-0']).to.be.an('object')
     })
     it('can set LocalStore: use share localStore (no-numbering)', () => {
       wrapper = makeComponent({
-        name: 'name', optionsName: 'option', isKeyName: false, share: true})
+        name: 'name',
+        optionsName: 'option',
+        isUsingName: false,
+        isUsingSameStore: true,
+      })
       expect(store.state.name).to.be.an('object')
     })
     it('can set LocalStore: localName option', () => {
       wrapper = makeComponent({
-        name: 'name', optionsName: 'option', isKeyName: false, share: true, localName: 'local'})
-      expect(store.state.local.name).to.be.an('object')
+        name: 'name',
+        optionsName: 'option',
+        isUsingName: false,
+        isUsingSameStore: true,
+        localName: 'local',
+      })
+      expect(store.state.name).to.be.an('object')
     })
     it('can set State', () => {
       wrapper = makeComponent()
@@ -125,6 +145,7 @@ describe('vuexl', () => {
     beforeEach(() => {
       localVue = createLocalVue()
       localVue.use(Vuex)
+      localVue.use(Vuexl)
       store = new Vuex.Store({
         state: {noValue: 1},
       })
@@ -144,7 +165,7 @@ describe('vuexl', () => {
       const wrapper = shallow(VuexlComponent, {store, localVue})
 
       expect(wrapper.vm.foo).to.equal(1)
-      expect(wrapper.vm[sLocalStore]).to.equal('vuexlTest-0')
+      expect(wrapper.vm[sLocalStoreStatus].localName).to.equal('vuexlTest-0')
     })
 
     it('can set LocalStore: no use key name', () => {
@@ -158,14 +179,14 @@ describe('vuexl', () => {
             value: 1,
           },
         }, {
-          isKeyName: false,
+          isUsingName: false,
         }) vuexlTest: string
       }
 
       const wrapper = shallow(VuexlComponent,{store, localVue})
 
       expect(wrapper.vm.foo).to.equal(1)
-      expect(wrapper.vm[sLocalStore]).to.equal('VuexlComponent-0')
+      expect(wrapper.vm[sLocalStoreStatus].localName).to.equal('VuexlComponent-0')
     })
 
     it('can set LocalStore: instances from same class use same Store', () => {
@@ -186,7 +207,7 @@ describe('vuexl', () => {
             },
           },
         }, {
-          share: true,
+          isUsingSameStore: true,
         }) vuexlTest: string
 
         // noinspection JSUnusedGlobalSymbols
@@ -200,7 +221,7 @@ describe('vuexl', () => {
 
       expect(component.vm.foo).to.equal(3)
       expect(component2.vm.foo).to.equal(3)
-      expect(component.vm[sLocalStore]).to.equal('vuexlTest')
+      expect(component.vm[sLocalStoreStatus].localName).to.equal('vuexlTest')
     })
 
     it('can set LocalStore: instances from same class do not use same Store', () => {
@@ -221,7 +242,7 @@ describe('vuexl', () => {
             },
           },
         }, {
-          share: false,
+          isUsingSameStore: false,
         }) vuexlTest: string
 
         // noinspection JSUnusedGlobalSymbols
@@ -235,8 +256,8 @@ describe('vuexl', () => {
 
       expect(component.vm.foo).to.equal(2)
       expect(component2.vm.foo).to.equal(2)
-      expect(component.vm[sLocalStore]).to.equal('vuexlTest-0')
-      expect(component2.vm[sLocalStore]).to.equal('vuexlTest-1')
+      expect(component.vm[sLocalStoreStatus].localName).to.equal('vuexlTest-0')
+      expect(component2.vm[sLocalStoreStatus].localName).to.equal('vuexlTest-1')
     })
 
     it('can decorate LocalState: key', () => {
@@ -477,7 +498,7 @@ describe('vuexl', () => {
   describe('vuexl with options: localName', () => {
     const localVue = createLocalVue()
     localVue.use(Vuex)
-    localVue.use(Vuexl, {localName: 'local'})
+    localVue.use(Vuexl, {name: 'local'})
     it('can set LocalStore', () => {
       // tslint:disable-next-line: max-classes-per-file
       @Component
@@ -494,7 +515,6 @@ describe('vuexl', () => {
       const wrapper = shallow(VuexlComponent, {store, localVue})
 
       expect(wrapper.vm.foo).to.equal(1)
-      console.log(wrapper.vm.$store.state)
       expect(wrapper.vm.$store.state.local['vuexlLocalNameTest-0'].value).to.equal(1)
     })
   })

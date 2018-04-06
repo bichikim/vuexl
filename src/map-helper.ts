@@ -1,18 +1,18 @@
 import {forEach} from 'lodash'
-import {ISetLocalStoreOptions} from './type'
 import {
   getLocalActionGetter,
   getLocalGetterGetter,
   getLocalMutationGetter,
   getLocalStateGetter,
-  setModule,
-} from './util'
+} from './module'
+import {registerLocal} from './register'
+import {ISetLocalStoreOptions} from './type'
 
 // eslint-disable-next-line func-style
 function mapFactory(maps, runner) {
   const result = {}
   forEach(maps, (map, key) => {
-    result[key] = runner(key, map)
+    result[key] = runner(map)
   })
   return result
 }
@@ -43,7 +43,7 @@ export const setLocalStore = (
     extends: targetVue,
     beforeCreate() {
       const {name} = options
-      setModule(this, store, name, options)
+      registerLocal(this, store, name, options)
     },
   }
 }

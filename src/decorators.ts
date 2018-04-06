@@ -1,12 +1,12 @@
 import {isFunction, isString} from 'lodash'
-import {ISetModuleNameOptions} from './type'
 import {
   getLocalActionGetter,
   getLocalGetterGetter,
   getLocalMutationGetter,
   getLocalStateGetter,
-  setModule,
-} from './util'
+} from './module'
+import {registerLocal} from './register'
+import {ISetModuleNameOptions} from './type'
 
 // eslint-disable-next-line func-style
 export function LocalStore(
@@ -19,7 +19,7 @@ export function LocalStore(
     Object.defineProperty(target, 'beforeCreate', {
       // tslint:disable-next-line
       value: function() {
-        setModule(this, _store, key, options)
+        registerLocal(this, _store, key, options)
         if(isFunction(targetBeforeCreate)){
           targetBeforeCreate.call(target)
         }
@@ -32,13 +32,15 @@ export function LocalStore(
 export function decoratorFactory(runner): any {
   // tslint:disable-next-line
   return function(option: any, _key?) {
+    let myOptions
     // tslint:disable-next-line
     const setDecorator = function(target: any, key: string | symbol) {
-      return runner.call(this, target, key, option)
+      return runner.call(this, target, key, myOptions)
     }
     if(!isString(option) && !isFunction(option)){
-      setDecorator(option, _key)
+      return setDecorator(option, _key)
     }
+    myOptions = option
     return setDecorator
   }
 }
@@ -50,7 +52,7 @@ export const LocalState = decoratorFactory(function(target, key, option) {
     // tslint:disable-next-line
     enumerable: true,
     configurable: true,
-    get: getLocalStateGetter(this, getter),
+    get: getLocalStateGetter(getter),
   })
 })
 
@@ -59,23 +61,25 @@ export const LocalMutation = decoratorFactory(function(target, key, option) {
   const getter: any = option? option : key
   Object.defineProperty(target, key, {
     // tslint:disable-next-line
-    value: getLocalMutationGetter(this, getter)
+    value: getLocalMutationGetter(getter)
   })
 })
 
 // tslint:disable-next-line
 export const LocalAction = decoratorFactory(function(target, key, option) {
+  const getter: any = option? option : key
   Object.defineProperty(target, key, {
     // tslint:disable-next-line
-    value: getLocalActionGetter(this, option),
+    value: getLocalActionGetter(getter),
   })
 })
 
 // tslint:disable-next-line
 export const LocalGetter = decoratorFactory(function(target, key, option) {
+  const getter: any = option? option : key
   Object.defineProperty(target, key, {
     // tslint:disable-next-line
-    get: getLocalGetterGetter(this, option)
+    get: getLocalGetterGetter(getter)
   })
 })
 
