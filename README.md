@@ -145,9 +145,7 @@ export default class VuexlComponent extends Vue {
 }
 ```
 ### Options
-- localName
-
-### Options.name
+#### Options.name
 >in case of having localName
 > way to use
 ```javascript
