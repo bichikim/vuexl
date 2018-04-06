@@ -146,7 +146,7 @@ export default class VuexlComponent extends Vue {
 ```
 ### Options
 #### Options.name
->in case of having localName
+>in case of having local root name
 > way to use
 ```javascript
 import Vue from 'vue'
