@@ -58,8 +58,10 @@ const component = new Vue(setLocalStore(
 ```javascript
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Vuexl from 'vuexl'
 import {setLocalStore, mapLocalActions, mapLocalGetters, mapLocalState, mapLocalMutations} from './'
 Vue.use(Vuex)
+Vue.use(Vuexl)
 const store = new Vuex.Store({
   state: {}
 })
@@ -110,13 +112,17 @@ const component = new Vue({
 ### Vuexl decorators
 ```typescript
 import Vue from 'vue'
+import Vuex from 'Vuex'
+import Vuexl from 'vuexl'
 import {Component, Prop} from 'vue-property-decorator'
-import {LocalAction, LocalStore, LocalState, LocalMutaion, LocalGetter} from './'
+import {LocalAction, LocalStore, LocalState, LocalMutation, LocalGetter} from './'
+Vue.use(Vuex)
+Vue.use(Vuexl)
 @Component
 export default class VuexlComponent extends Vue {
   @LocalState value: number
   @LocalGetter opposite: number
-  @LocalMutaion('increase') mutIncrease: () => void
+  @LocalMutation('increase') mutIncrease: () => void
   @LocalAction increase: () => void
   @LocalStore({
      state: {value: 1},
@@ -164,6 +170,5 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Vuexl from './'
 Vue.use(Vuex)
-// you don't need ues this if you don't want any options
-Vue.use(Vuexl, {localName: 'myLocalName'})
+Vue.use(Vuexl, {name: 'myLocalName'})
 ```
