@@ -92,14 +92,14 @@ export const registerLocal = (
 
 export const unregisterLocal = (vm: IStoreVue<any>) => {
   const {$store} = vm
-  const localStoreStatus = getLocalStoreState(this)
+  const localStoreStatus = getLocalStoreState(vm)
   const {localName, isUsingSameStore, name} = localStoreStatus
   if(!$store || !localName){return}
   const decrease = -1
   const count: number = getNameNumber(vm, name, decrease)
   if(!isUsingSameStore || count < 0){
-    const localStoreName: string = getLocalStoreName(this)
-    const localStoreChannelName: string = getChannelName(this)
+    const localStoreName: string = getLocalStoreName(vm)
+    const localStoreChannelName: string = getChannelName(vm)
     $store.unregisterModule(getNameSpace(localStoreName, localStoreChannelName))
   }
 }

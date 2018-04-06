@@ -20,6 +20,8 @@ export const getLocalStateGetter = (getter?: TStateGetter) => {
   // tslint:disable-next-line: only-arrow-functions
   return function() {
     const {$isServer, $store} = this
+    console.log()
+    console.log('getter', getter, $isServer, $store)
     if(!$store || $isServer || !getter){return}
     const localStoreName: string = getLocalStoreName(this)
     const localStoreChannelName: string = getChannelName(this)
@@ -27,6 +29,7 @@ export const getLocalStateGetter = (getter?: TStateGetter) => {
       $store,
       getNameSpace(localStoreName, localStoreChannelName),
     )
+    console.log('st module', module.context.state)
     const {state, getters} = module.context
     if(isFunction(getter)){
       return getter.call(this, state, getters)

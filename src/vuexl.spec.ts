@@ -1,5 +1,5 @@
 /* eslint-disable new-cap,no-magic-numbers,max-lines */
-import {createLocalVue, shallow} from '@vue/test-utils'
+import {createLocalVue, mount, shallow} from '@vue/test-utils'
 import {expect} from 'chai'
 import {Component, Vue} from 'vue-property-decorator'
 import Vuex from 'vuex'
@@ -138,6 +138,14 @@ describe('vuexl', () => {
       wrapper.vm.increaseA()
       expect(wrapper.vm.value).to.equal(2)
     })
+
+    it('can destroy', () => {
+      wrapper = makeComponent()
+      console.log(store.state)
+      expect(store.state['unknown-0']).to.be.a('object')
+      wrapper.destroy()
+      expect(store.state['unknown-0']).to.be.an('undefined')
+    })
   })
 
   describe('vuexl: class way' ,() => {
@@ -153,7 +161,11 @@ describe('vuexl', () => {
     })
     it('can set LocalStore', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState('value') foo: number
 
@@ -173,6 +185,9 @@ describe('vuexl', () => {
     it('can set LocalStore: without decoration', () => {
       // tslint:disable-next-line: max-classes-per-file
       @LComponent({
+        render(h) {
+          return h('div')
+        },
         localStore() {
           return {
             store: {
@@ -196,7 +211,11 @@ describe('vuexl', () => {
 
     it('can set LocalStore: no use key name', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState('value') foo: number
 
@@ -217,7 +236,11 @@ describe('vuexl', () => {
 
     it('can set LocalStore: instances from same class use same Store', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState('value') foo: number
 
@@ -252,7 +275,11 @@ describe('vuexl', () => {
 
     it('can set LocalStore: instances from same class do not use same Store', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState('value') foo: number
 
@@ -288,7 +315,11 @@ describe('vuexl', () => {
 
     it('can decorate LocalState: key', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState value: number
 
@@ -306,7 +337,11 @@ describe('vuexl', () => {
 
     it('can decorate LocalState: string', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState('value') foo: number
 
@@ -324,7 +359,11 @@ describe('vuexl', () => {
 
     it('can decorate LocalState: function', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState((state) => (state.value)) foo: number
 
@@ -342,7 +381,11 @@ describe('vuexl', () => {
 
     it('can decorate LocalAction: key', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState((state) => (state.value)) foo: number
 
@@ -377,7 +420,11 @@ describe('vuexl', () => {
 
     it('can decorate LocalAction: string', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState((state) => (state.value)) foo: number
 
@@ -412,7 +459,11 @@ describe('vuexl', () => {
 
     it('can decorate LocalMutation: key', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState((state) => (state.value)) foo: number
 
@@ -442,7 +493,11 @@ describe('vuexl', () => {
 
     it('can decorate LocalMutation: string', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState((state) => (state.value)) foo: number
 
@@ -472,7 +527,11 @@ describe('vuexl', () => {
 
     it('can decorate LocalGetter: string', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState((state) => (state.value)) foo: number
 
@@ -497,7 +556,11 @@ describe('vuexl', () => {
 
     it('can decorate LocalGetter: key', () => {
       // tslint:disable-next-line: max-classes-per-file
-      @Component
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
       class VuexlComponent extends Vue {
         @LocalState((state) => (state.value)) foo: number
 
@@ -518,6 +581,87 @@ describe('vuexl', () => {
       const component = shallow(VuexlComponent, {store, localVue})
 
       expect(component.vm.ma).to.equal(-1)
+    })
+    it('can destroy', () => {
+      // tslint:disable-next-line: max-classes-per-file
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
+      class VuexlComponent extends Vue {
+        @LocalState((state) => (state.value)) foo: number
+
+        @LocalGetter ma: number
+
+        @LocalStore({
+          state: {
+            value: 1,
+          },
+          getters: {
+            ma: (state) => {
+              return state.value * -1
+            },
+          },
+        }) vuexlTest: string
+      }
+
+      const component = shallow(VuexlComponent, {store, localVue})
+      const component2 = shallow(VuexlComponent, {store, localVue})
+      console.log(store.state['vuexlTest-0'])
+      expect(store.state['vuexlTest-0'].value).to.equal(1)
+      expect(store.state['vuexlTest-1'].value).to.equal(1)
+      component.destroy()
+      expect(store.state['vuexlTest-0']).to.be.an('undefined')
+      expect(store.state['vuexlTest-1'].value).to.equal(1)
+      component2.destroy()
+      expect(store.state['vuexlTest-1']).to.be.an('undefined')
+    })
+
+    it('can use parent store', () => {
+      // tslint:disable-next-line: max-classes-per-file
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
+      // eslint-disable-next-line no-unused-vars
+      class ChildComponent extends Vue {
+        @LocalState((state) => {
+          console.log('state us', state)
+          return state.value
+        }) foo: number
+        created() {
+          console.log(this.$store)
+          console.log('-------------------', this.foo)
+        }
+      }
+      // tslint:disable-next-line: max-classes-per-file
+      @Component({
+        render(h) {
+          return h(ChildComponent)
+        },
+      })
+      class VuexlComponent extends Vue {
+        @LocalState((state) => (state.value)) foo: number
+
+        @LocalGetter ma: number
+
+        @LocalStore({
+          state: {
+            value: 1,
+          },
+          getters: {
+            ma: (state) => {
+              return state.value * -1
+            },
+          },
+        }) vuexlTest: string
+      }
+
+      const component = mount(VuexlComponent, {store, localVue})
+      console.log(component.vm.$children)
+      expect(component.vm.foo).to.equal(2)
     })
   })
 
