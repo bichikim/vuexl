@@ -5,14 +5,21 @@
  * @license Private
  */
 const WebpackBaseConfig = require('./webpack.base.config')
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const WebpackMerge = require('webpack-merge')
-const nodeExternals = require('webpack-node-externals');
-WebpackBaseConfig.output.libraryTarget = 'umd' // module mode
 module.exports = WebpackMerge(WebpackBaseConfig, {
+  output: {
+    library: 'vuex-keg',
+    libraryTarget: 'umd',
+  },
   mode: 'production',
-  // plugins: [
-  //   new UglifyJsPlugin(),
-  // ],
-  externals: [nodeExternals()]
+  externals: {
+    lodash: {
+      commonjs: 'lodash',
+      commonjs2: 'lodash',
+      amd: 'lodash',
+      root: '_',
+    },
+    vuex: 'vuex',
+    'vue-class-component': 'vue-class-component'
+  }
 })

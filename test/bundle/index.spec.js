@@ -1,5 +1,4 @@
 const vuexl = require('../../dist/app')
-const {expect} = require('chai')
 describe('sulleong', () => {
   it('has all members', () => {
     expect(vuexl.default.install).to.be.a('function')

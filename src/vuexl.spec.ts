@@ -141,7 +141,6 @@ describe('vuexl', () => {
 
     it('can destroy', () => {
       wrapper = makeComponent()
-      console.log(store.state)
       expect(store.state['unknown-0']).to.be.a('object')
       wrapper.destroy()
       expect(store.state['unknown-0']).to.be.an('undefined')
@@ -608,7 +607,6 @@ describe('vuexl', () => {
 
       const component = shallow(VuexlComponent, {store, localVue})
       const component2 = shallow(VuexlComponent, {store, localVue})
-      console.log(store.state['vuexlTest-0'])
       expect(store.state['vuexlTest-0'].value).to.equal(1)
       expect(store.state['vuexlTest-1'].value).to.equal(1)
       component.destroy()
@@ -619,6 +617,7 @@ describe('vuexl', () => {
     })
 
     it('can use parent store', () => {
+      let child
       // tslint:disable-next-line: max-classes-per-file
       @Component({
         render(h) {
@@ -627,13 +626,11 @@ describe('vuexl', () => {
         })
       // eslint-disable-next-line no-unused-vars
       class ChildComponent extends Vue {
-        @LocalState((state) => {
-          console.log('state us', state)
-          return state.value
-        }) foo: number
+        @LocalState((state) => (state.value)) foo: number
         created() {
-          console.log(this.$store)
-          console.log('-------------------', this.foo)
+          this.$store = store
+          // eslint-disable-next-line consistent-this
+          child = this
         }
       }
       // tslint:disable-next-line: max-classes-per-file
@@ -645,7 +642,7 @@ describe('vuexl', () => {
       class VuexlComponent extends Vue {
         @LocalState((state) => (state.value)) foo: number
 
-        @LocalGetter ma: number
+        @LocalMutation increase: () => void
 
         @LocalStore({
           state: {
@@ -656,12 +653,18 @@ describe('vuexl', () => {
               return state.value * -1
             },
           },
+          mutations: {
+            increase(state) {
+              state.value += 1
+            },
+          },
         }) vuexlTest: string
       }
-
       const component = mount(VuexlComponent, {store, localVue})
-      console.log(component.vm.$children)
+      component.vm.increase()
+      // this test is not working need to find some solution
       expect(component.vm.foo).to.equal(2)
+      expect(child.foo).to.equal(2)
     })
   })
 

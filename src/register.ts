@@ -59,7 +59,7 @@ export const registerLocal = (
   vm: IStoreVue<any>,
   store: Module<any, any>,
   localStoreName: string,
-  options: ISetModuleNameOptions,
+  options: ISetModuleNameOptions = {},
 ): void => {
   // $isServer is for Nuxt.
   const {$store = null, $isServer = false} = vm
@@ -67,15 +67,16 @@ export const registerLocal = (
   if(!$store || $isServer){return}
   const localChannelName: string | undefined = getChannelName(vm)
   const localName: string = getName(vm, localStoreName, options)
+  const {isUsingName = true, isUsingSameStore = false} = options
   // confirm root store has module for localChannelName
   confirmChannel(vm, localChannelName)
   // save local store status to use
   vm[sLocalStoreStatus] = {
-    ...options,
+    isUsingName,
+    isUsingSameStore,
     name: localStoreName,
     localName,
     localConnectedName: null,
-    localNameCounters: null,
   } as ILocalStoreOptions
   // if already store has module skip creating module
   if(isLocalStore($store, localName, localChannelName)){return}
@@ -94,7 +95,7 @@ export const unregisterLocal = (vm: IStoreVue<any>) => {
   const {$store, $isServer} = vm
   const localStoreStatus = getLocalStoreState(vm)
   const {localName, isUsingSameStore, name} = localStoreStatus
-  if(!$store || !$isServer || !localName){return}
+  if(!$store || $isServer || !localName){return}
   const decrease = -1
   const count: number = getNameNumber(vm, name, decrease)
   if(!isUsingSameStore || count < 0){

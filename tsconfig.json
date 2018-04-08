@@ -1,9 +1,5 @@
 {
   "compilerOptions": {
-    /* Basic Options */
-    "types": [
-      "mocha"
-    ],
     "module": "esnext",
     "target": "es5",
     "lib": [
