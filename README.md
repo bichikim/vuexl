@@ -45,7 +45,7 @@ const component = new Vue(setLocalStore(
       oppositeValue(state){
         return state.value * -1
       }
-    }
+    },
     mutations: {
       increase(state) {
         state.value += 1
@@ -58,8 +58,7 @@ const component = new Vue(setLocalStore(
 ```javascript
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Vuexl from 'vuexl'
-import {setLocalStore, mapLocalActions, mapLocalGetters, mapLocalState, mapLocalMutations} from './'
+import Vuexl, {setLocalStore, mapLocalActions, mapLocalGetters, mapLocalState, mapLocalMutations} from './src'
 Vue.use(Vuex)
 Vue.use(Vuexl)
 const store = new Vuex.Store({
@@ -82,7 +81,7 @@ const component = new Vue({
           oppositeValue(state){
             return state.value * -1
           }
-        }
+        },
         mutations: {
           increase(state) {
             state.value += 1
@@ -112,10 +111,9 @@ const component = new Vue({
 ### Vuexl decorators
 ```typescript
 import Vue from 'vue'
-import Vuex from 'Vuex'
-import Vuexl from 'vuexl'
+import Vuex from 'vuex'
+import Vuexl, {LocalAction, LocalStore, LocalState, LocalMutation, LocalGetter} from './src'
 import {Component, Prop} from 'vue-property-decorator'
-import {LocalAction, LocalStore, LocalState, LocalMutation, LocalGetter} from './'
 Vue.use(Vuex)
 Vue.use(Vuexl)
 @Component
@@ -151,7 +149,7 @@ export default class VuexlComponent extends Vue {
 ```javascript
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Vuexl from './'
+import Vuexl from './src'
 Vue.use(Vuex)
 Vue.use(Vuexl, {name: 'myLocalName'})
 ```

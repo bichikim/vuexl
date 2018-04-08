@@ -1,5 +1,5 @@
 const vuexl = require('../../dist/app')
-describe('sulleong', () => {
+describe('vuexl', () => {
   it('has all members', () => {
     expect(vuexl.default.install).to.be.a('function')
     expect(vuexl.LocalAction).to.be.a('function')
