@@ -12,7 +12,7 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai'],
     reporters: ['spec', 'coverage'],
     files: [
-      './../../node_modules/babel-polyfill/dist/polyfill.js',
+      '../../node_modules/babel-polyfill/dist/polyfill.js',
       {pattern: '../../src/**/*.spec.js', watched: true},
       {pattern: '../../src/**/*.spec.ts', watched: true},
       {pattern: '../bundle/*.spec.js'}
