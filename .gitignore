@@ -19,7 +19,6 @@ test/unit/coverage/
 debug.log*
 
 ## environment files
-yarn.lock
 package-lock.json
 .env
 

@@ -15,7 +15,6 @@ module.exports = function(config) {
       '../../node_modules/babel-polyfill/dist/polyfill.js',
       {pattern: '../../src/**/*.spec.js', watched: true},
       {pattern: '../../src/**/*.spec.ts', watched: true},
-      {pattern: '../bundle/*.spec.js'}
     ],
     exclude: [
       '../../src/**/*.spec.skip.js',
@@ -24,7 +23,6 @@ module.exports = function(config) {
     preprocessors: {
       '../../src/**/*.js': ['webpack', 'sourcemap'],
       '../../src/**/*.ts': ['webpack', 'sourcemap'],
-      '../bundle/**/*.js': ['webpack', 'sourcemap'],
       //'': ['webpack', 'sourcemap', 'coverage'],
     },
     coverageReporter: {

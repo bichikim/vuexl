@@ -9,6 +9,7 @@
   "scripts": {
     "build": "babel-node build/build.js",
     "doc": "typedoc -out ./docs ./src --media ./media",
+    "test": "karma start test/unit/karma.config.js --browsers=PhantomJS",
     "test:bundle": "karma start test/unit/karma.bundle.config.js",
     "test:unit": "karma start test/unit/karma.config.js",
     "test:unit-watch": "karma start test/unit/karma.config.js --auto-watch"
