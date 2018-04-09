@@ -1,6 +1,6 @@
 {
   "name": "vuexl",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "runtime type checker",
   "author": "bichi",
   "main": "dist/app.js",
@@ -10,9 +10,8 @@
     "build": "babel-node build/build.js",
     "doc": "typedoc -out ./docs ./src --media ./media",
     "test": "karma start test/unit/karma.config.js --browsers=PhantomJS --single-run",
-    "test:bundle": "karma start test/unit/karma.bundle.config.js",
-    "test:unit": "karma start test/unit/karma.config.js",
-    "test:unit-watch": "karma start test/unit/karma.config.js --auto-watch"
+    "test:bundle": "karma start test/unit/karma.bundle.config.js --single-run",
+    "test:unit": "karma start test/unit/karma.config.js --single-run"
   },
   "repository": {
     "type": "git",

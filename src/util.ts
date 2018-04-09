@@ -22,13 +22,18 @@ export const getLocalStoreName = (vm: IStoreVue<any>): string => {
   }
   // start upper search til getting localName
   let currentVm = vm
-  let localStoreName
+  let localStatus
   while(currentVm){
-    localStoreName = currentVm[sLocalStoreStatus].localName
-    if(localStoreName){
+    localStatus = currentVm[sLocalStoreStatus]
+    if(!localStatus){
+      localStatus = {}
+      currentVm[sLocalStoreStatus] = localStatus
+    }
+    const {localName = null} = localStatus
+    if(localName){
       // save connected name for performance to find name again
-      vm[sLocalStoreStatus].localConnectedName = localStoreName
-      return localStoreName
+      vm[sLocalStoreStatus].localConnectedName = localName
+      return localName
     }
     currentVm = currentVm.$parent
   }
