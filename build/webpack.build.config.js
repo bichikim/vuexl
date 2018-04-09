@@ -10,6 +10,8 @@ module.exports = WebpackMerge(WebpackBaseConfig, {
   output: {
     library: 'vuex-keg',
     libraryTarget: 'umd',
+    umdNamedDefine: true,
+    globalObject: 'this'
   },
   mode: 'production',
   externals: {

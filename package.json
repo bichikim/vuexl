@@ -1,6 +1,6 @@
 {
   "name": "vuexl",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "runtime type checker",
   "author": "bichi",
   "main": "dist/app.js",
