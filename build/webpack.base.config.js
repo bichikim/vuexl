@@ -1,9 +1,3 @@
-/**
- *
- * @author Bichi Kim [bichi@pjfactory.com]
- * @copyright (c) PJ Factory Co.
- * @license Private
- */
 const path = require('path')
 const webpack = require('webpack')
 const formatter = require('eslint-friendly-formatter')

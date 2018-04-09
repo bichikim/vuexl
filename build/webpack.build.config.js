@@ -1,9 +1,3 @@
-/**
- *
- * @author Bichi Kim [bichi@pjfactory.com]
- * @copyright (c) PJ Factory Co.
- * @license Private
- */
 const WebpackBaseConfig = require('./webpack.base.config')
 const WebpackMerge = require('webpack-merge')
 module.exports = WebpackMerge(WebpackBaseConfig, {

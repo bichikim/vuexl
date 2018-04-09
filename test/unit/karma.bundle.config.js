@@ -1,8 +1,5 @@
 /**
- * karma settings
- * This test must have packages below
- * karma, karma-chai, karma-sourcemap-loader, karma-spec-reporter, karma-webpack
- * mocha, chai, karma-coverage
+ * karma settings for bundle checking
  * @author Bichi Kim <bichi@live.co.kr>
  */
 const webpack = require('../../build/webpack.test.config.js')
