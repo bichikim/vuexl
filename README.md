@@ -1,4 +1,5 @@
 # Vuexl
+🏴 since webpack4 umd bug, This is not working. It will be fixed soon~!
 * State: 👌 done
 > vuex local management module\
 > vuex 로컬 관리 모듈
