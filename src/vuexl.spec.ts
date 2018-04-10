@@ -672,26 +672,29 @@ describe('vuexl', () => {
         // tslint:disable-next-line: max-classes-per-file
         @Component({
           render(h) {
-            return h('div')
+          return h('div')
           },
-        })
-          // eslint-disable-next-line no-unused-vars
+          })
+        // eslint-disable-next-line no-unused-vars
         class ChildComponent extends Vue {
           @LocalState((state) => (state.value)) foo: number
           nextFoo: number
+
           created() {
             this.$store = store
             this.nextFoo = this.foo
           }
         }
+
         // tslint:disable-next-line: max-classes-per-file
         @Component({
           render(h) {
-            return h(ChildComponent)
+          return h(ChildComponent)
           },
-        })
+          })
         class VuexlComponent extends Vue {
         }
+
         mount(VuexlComponent, {store, localVue})
       }
 

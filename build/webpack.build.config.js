@@ -2,7 +2,7 @@ const WebpackBaseConfig = require('./webpack.base.config')
 const WebpackMerge = require('webpack-merge')
 module.exports = WebpackMerge(WebpackBaseConfig, {
   output: {
-    library: 'vuex-keg',
+    library: 'vuexl',
     libraryTarget: 'umd',
     umdNamedDefine: true,
     globalObject: 'this'

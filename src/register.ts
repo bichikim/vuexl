@@ -93,9 +93,10 @@ export const registerLocal = (
 
 export const unregisterLocal = (vm: IStoreVue<any>) => {
   const {$store, $isServer} = vm
+  if($isServer){return}
   const localStoreStatus = getLocalStoreState(vm)
   const {localName, isUsingSameStore, name} = localStoreStatus
-  if(!$store || $isServer || !localName){return}
+  if(!$store || !localName){return}
   const decrease = -1
   const count: number = getNameNumber(vm, name, decrease)
   if(!isUsingSameStore || count < 0){

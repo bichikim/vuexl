@@ -55,11 +55,6 @@ module.exports = {
         exclude: /node_modules/,
         use: 'babel-loader',
       },
-      {
-        test: /\.vue$/,
-        exclude: /node_modules/,
-        loader: 'vue-loader',
-      },
     ]
   },
 }
