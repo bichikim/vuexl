@@ -51,7 +51,7 @@ const confirmChannel = (vm: IStoreVue<any>, name?: string): void => {
 
 const isLocalStore = (store: Store<any>, localName: string, channelName?: string): boolean => {
   const {state} = store
-  return Boolean(channelName ? state[channelName][name] : state[name])
+  return Boolean(channelName ? state[channelName][localName] : state[localName])
 
 }
 
@@ -62,7 +62,7 @@ export const registerLocal = (
   options: ISetModuleNameOptions = {},
 ): void => {
   // $isServer is for Nuxt.
-  const {$store = null, $isServer = false} = vm
+  const {$store = null, $isServer} = vm
   // isServer checking is for Nuxt
   if(!$store || $isServer){return}
   const localChannelName: string | undefined = getChannelName(vm)

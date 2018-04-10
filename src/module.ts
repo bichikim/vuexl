@@ -19,31 +19,33 @@ export const getNameSpace = (localStoreName: string, localStoreChannelName?: str
 export const getLocalStateGetter = (getter?: TStateGetter) => {
   // tslint:disable-next-line: only-arrow-functions
   return function() {
-    const {$isServer, $store} = this
+    const {$store, $isServer} = this
     if(!$store || $isServer || !getter){return}
-    const localStoreName: string = getLocalStoreName(this)
+    const localStoreName: string | undefined = getLocalStoreName(this)
+    if(!localStoreName){return}
     const localStoreChannelName: string = getChannelName(this)
     const module = getModuleByNameSpace(
       $store,
       getNameSpace(localStoreName, localStoreChannelName),
     )
     const {state, getters} = module.context
+    if(!state){return}
     if(isFunction(getter)){
       return getter.call(this, state, getters)
     }
     if(isString(getter)){
       return state[getter]
     }
-    return null
   }
 }
 
 export const getLocalMutationGetter = (getter?: TMutationGetter) => {
   // tslint:disable-next-line: only-arrow-functions
   return function(...args: any[]) {
-    const {$isServer, $store} = this
+    const {$store, $isServer} = this
     if(!$store || $isServer || !getter){return}
-    const localStoreName: string = getLocalStoreName(this)
+    const localStoreName: string | undefined = getLocalStoreName(this)
+    if(!localStoreName){return}
     const localStoreChannelName: string = getChannelName(this)
     const module = getModuleByNameSpace(
       $store,
@@ -60,9 +62,10 @@ export const getLocalMutationGetter = (getter?: TMutationGetter) => {
 export const getLocalGetterGetter = (getter?: TActionGetter) => {
   // tslint:disable-next-line: only-arrow-functions
   return function() {
-    const {$isServer, $store} = this
+    const {$store, $isServer} = this
     if(!$store || $isServer || !getter){return}
-    const localStoreName: string = getLocalStoreName(this)
+    const localStoreName: string | undefined = getLocalStoreName(this)
+    if(!localStoreName){return}
     const localStoreChannelName: string = getChannelName(this)
     const {getters} = $store
     const name = `${getNameSpace(localStoreName, localStoreChannelName)}/${getter}`
@@ -73,9 +76,10 @@ export const getLocalGetterGetter = (getter?: TActionGetter) => {
 export const getLocalActionGetter = (getter?: TActionGetter) => {
   // tslint:disable-next-line: only-arrow-functions
   return function(...args: any[]) {
-    const {$isServer, $store} = this
+    const {$store, $isServer} = this
     if(!$store || $isServer || !getter){return}
-    const localStoreName: string = getLocalStoreName(this)
+    const localStoreName: string | undefined = getLocalStoreName(this)
+    if(!localStoreName){return}
     const localStoreChannelName: string = getChannelName(this)
     const module = getModuleByNameSpace(
       $store,

@@ -34,6 +34,7 @@ export type TGetterGetter = string
 
 export interface IPluginOptions {
   name?: string
+  store?: Store<any>,
 }
 
 export interface ISetStateResult {

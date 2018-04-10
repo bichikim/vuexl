@@ -8,7 +8,7 @@ export const getLocalStoreState = (vm: IStoreVue<any>) => {
   return vm[sLocalStoreStatus] || {}
 }
 
-export const getLocalStoreName = (vm: IStoreVue<any>): string => {
+export const getLocalStoreName = (vm: IStoreVue<any>): string | undefined => {
   if(!vm){return}
   // if already it has connected LocalName
   let localStoreStatus = vm[sLocalStoreStatus]
@@ -38,5 +38,4 @@ export const getLocalStoreName = (vm: IStoreVue<any>): string => {
     currentVm = currentVm.$parent
   }
   // if cannot find any local Store throw Error because vm won't work without local store
-  throw new Error('[Vuexl findLocalStoreName] cannot find a local store name')
 }

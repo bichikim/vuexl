@@ -666,41 +666,6 @@ describe('vuexl', () => {
       expect(component.vm.foo).to.equal(2)
       expect(child.foo).to.equal(2)
     })
-
-    it('can throw an error for no local store', () => {
-      const errorThrow = () => {
-        // tslint:disable-next-line: max-classes-per-file
-        @Component({
-          render(h) {
-          return h('div')
-          },
-          })
-        // eslint-disable-next-line no-unused-vars
-        class ChildComponent extends Vue {
-          @LocalState((state) => (state.value)) foo: number
-          nextFoo: number
-
-          created() {
-            this.$store = store
-            this.nextFoo = this.foo
-          }
-        }
-
-        // tslint:disable-next-line: max-classes-per-file
-        @Component({
-          render(h) {
-          return h(ChildComponent)
-          },
-          })
-        class VuexlComponent extends Vue {
-        }
-
-        mount(VuexlComponent, {store, localVue})
-      }
-
-      // this test is not working need to find some solution
-      expect(errorThrow).to.throw(/cannot find a local store name/)
-    })
   })
 
   describe('vuexl with options: localName', () => {
