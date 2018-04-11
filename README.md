@@ -154,3 +154,5 @@ import Vuexl from './src'
 Vue.use(Vuex)
 Vue.use(Vuexl, {name: 'myLocalName'})
 ```
+### IN nuxt
+please add 'vuexl' in vendor
