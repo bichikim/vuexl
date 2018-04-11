@@ -1,7 +1,7 @@
 {
   "name": "vuexl",
   "version": "0.0.13",
-  "description": "runtime type checker",
+  "description": "vuex local management module",
   "author": "bichi",
   "main": "dist/app.js",
   "types": "src/index.ts",
