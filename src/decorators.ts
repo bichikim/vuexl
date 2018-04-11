@@ -50,6 +50,7 @@ export function decoratorFactory(runner): any {
 // tslint:disable-next-line
 export const LocalState = decoratorFactory(function(target, key, option) {
   const getter: any = option? option: key
+  console.log('local state', getter)
   Object.defineProperty(target, key, {
     get: getLocalStateGetter(getter),
   })
