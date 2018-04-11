@@ -51,9 +51,6 @@ export function decoratorFactory(runner): any {
 export const LocalState = decoratorFactory(function(target, key, option) {
   const getter: any = option? option: key
   Object.defineProperty(target, key, {
-    // tslint:disable-next-line
-    enumerable: true,
-    configurable: true,
     get: getLocalStateGetter(getter),
   })
 })
@@ -62,7 +59,6 @@ export const LocalState = decoratorFactory(function(target, key, option) {
 export const LocalMutation = decoratorFactory(function(target, key, option) {
   const getter: any = option? option : key
   Object.defineProperty(target, key, {
-    // tslint:disable-next-line
     value: getLocalMutationGetter(getter),
   })
 })
@@ -71,7 +67,6 @@ export const LocalMutation = decoratorFactory(function(target, key, option) {
 export const LocalAction = decoratorFactory(function(target, key, option) {
   const getter: any = option? option : key
   Object.defineProperty(target, key, {
-    // tslint:disable-next-line
     value: getLocalActionGetter(getter),
   })
 })
@@ -80,7 +75,6 @@ export const LocalAction = decoratorFactory(function(target, key, option) {
 export const LocalGetter = decoratorFactory(function(target, key, option) {
   const getter: any = option? option : key
   Object.defineProperty(target, key, {
-    // tslint:disable-next-line
     get: getLocalGetterGetter(getter),
   })
 })
