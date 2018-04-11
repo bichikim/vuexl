@@ -1,5 +1,5 @@
 # Vuexl
-* State: 👌 done
+[![Build Status](https://travis-ci.org/bichikim/vuexl.svg?branch=master)](https://travis-ci.org/bichikim/vuexl)
 > vuex local management module\
 > vuex 로컬 관리 모듈
 ## Feature
