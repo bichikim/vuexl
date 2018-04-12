@@ -53,12 +53,16 @@ const component = new Vue(setLocalStore(
     }
   } // store
 ))
+component.increase()
+expect(component.value).to.equal(2)
+component.mIncrease()
+expect(component.oValue).to.equal(-3)
 ```
 ### Vuexl helpers
 ```javascript
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Vuexl, {setLocalStore, mapLocalActions, mapLocalGetters, mapLocalState, mapLocalMutations} from './src'
+import Vuexl, {mapLocalActions, mapLocalGetters, mapLocalState, mapLocalMutations} from './src'
 Vue.use(Vuex)
 Vue.use(Vuexl)
 const store = new Vuex.Store({
@@ -107,17 +111,29 @@ const component = new Vue({
     }),
   }
 })
+component.increase()
+expect(component.value).to.equal(2)
+component.mIncrease()
+expect(component.oValue).to.equal(-3)
 ```
 ### Vuexl decorators
 ```typescript
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Vuexl, {LocalAction, LocalStore, LocalState, LocalMutation, LocalGetter} from './src'
-import {Component, Prop} from 'vue-property-decorator'
+import {expect} from 'chai'
+import Vuexl, {
+  LocalAction,
+  LocalStore,
+  LocalState,
+  LocalMutation,
+  LocalGetter,
+} from './src'
+import {Component} from 'vue-property-decorator'
 Vue.use(Vuex)
 Vue.use(Vuexl)
+
 @Component
-export default class VuexlComponent extends Vue {
+class VuexlComponent extends Vue {
   @LocalState value: number
   @LocalGetter opposite: number
   @LocalMutation('increase') mutIncrease: () => void
@@ -141,6 +157,11 @@ export default class VuexlComponent extends Vue {
      }
   }) VuexlName: string
 }
+const component = new VuexlComponent()
+component.increase()
+expect(component.value).to.equal(2)
+component.mutIncrease()
+expect(component.opposite).to.equal(-3)
 ```
 ### Options
 #### Options.name
@@ -154,5 +175,3 @@ import Vuexl from './src'
 Vue.use(Vuex)
 Vue.use(Vuexl, {name: 'myLocalName'})
 ```
-### IN nuxt
-please add 'vuexl' in vendor
