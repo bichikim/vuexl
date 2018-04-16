@@ -1,6 +1,6 @@
 import {isFunction} from 'lodash'
 import Vue, {ComponentOptions} from 'vue'
-import vueComponent from 'vue-class-component'
+import Component from 'vue-class-component'
 import {Module} from 'vuex'
 import {LocalAction, LocalGetter, LocalMutation, LocalState, LocalStore} from './decorators'
 import {
@@ -73,13 +73,37 @@ export {
 
 // let _Vue: Vue
 // noinspection JSUnusedGlobalSymbols
+let registered: boolean = false
 export default {
   install(vue, options: IPluginOptions = {}) {
-    const {name} = options
+    if(registered){
+      if(process.env.NODE_ENV !== 'production'){
+        console.warn('[vuexl] install vuexl twice')
+      }
+    }
+    registered = true
+    const {name, isNuxt = true} = options
     // if(_Vue){
     //   throw new Error('[Vuexl install] already installed')
     // }
     // _Vue = vue
+    if(isNuxt){
+      Component.registerHooks([
+        'beforeRouteEnter',
+        'beforeRouteLeave',
+        'asyncData',
+        'fetch',
+        'head',
+        'middleware',
+        'layout',
+        'transition',
+        'scrollToTop',
+        'validate',
+      ])
+    }
+    Component.registerHooks([
+      'localStore',
+    ])
     vue.prototype[sLocalStoreChannelName] = name
     vue.prototype[sLocalStoreCounter] = {}
     vue.mixin({
@@ -105,6 +129,8 @@ interface IVuexlComponentOptions extends ComponentOptions<Vue>{
 }
 
 // eslint-disable-next-line func-style
-export function Component(options: IVuexlComponentOptions) {
-  return vueComponent(options as ComponentOptions<Vue>)
-}
+// export function Component(options: IVuexlComponentOptions) {
+//   return vueComponent(options as ComponentOptions<Vue>)
+// }
+
+export {Component}

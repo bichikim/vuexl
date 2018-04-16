@@ -34,7 +34,7 @@ export type TGetterGetter = string
 
 export interface IPluginOptions {
   name?: string
-  store?: Store<any>,
+  isNuxt?: boolean
 }
 
 export interface ISetStateResult {
