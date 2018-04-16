@@ -1,8 +1,12 @@
 # Vuexl
 [![Build Status](https://travis-ci.org/bichikim/vuexl.svg?branch=master)](https://travis-ci.org/bichikim/vuexl)
-> vuex local management module\
-> vuex 로컬 관리 모듈
+> vuex management module\
 ## Feature
+ - vuex typescript decorations
+ - vuex mapHelpers
+ - vuex local typescript decorations
+ - vuex local mapHelpers
+ 
 ### Vuexl helpers
 ```javascript
 import Vue from 'vue'

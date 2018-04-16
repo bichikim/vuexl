@@ -4,8 +4,12 @@ import {
   getLocalGetterGetter,
   getLocalMutationGetter,
   getLocalStateGetter,
+  getStateGetter,
 } from './module'
-import {ISetModuleNameOptions} from './type'
+import {
+  ISetModuleNameOptions,
+  TDecoratorFactoryRunner,
+} from './type'
 
 // eslint-disable-next-line func-style
 export function LocalStore(
@@ -31,18 +35,19 @@ export function LocalStore(
 }
 
 // eslint-disable-next-line func-style
-export function decoratorFactory(runner): any {
+export function decoratorFactory(runner: TDecoratorFactoryRunner): any {
   // tslint:disable-next-line
-  return function(option: any, _key?) {
-    let myOptions
+  return function(option: any, _key?, ...others) {
+    let myOptions, myOthers
     // tslint:disable-next-line
     const setDecorator = function(target: any, key: string | symbol) {
-      return runner.call(this, target, key, myOptions)
+      return runner.call(this, target, key, myOptions, ...myOthers)
     }
     if(!isString(option) && !isFunction(option)){
       return setDecorator(option, _key)
     }
     myOptions = option
+    myOthers = [_key].concat(others)
     return setDecorator
   }
 }
@@ -52,6 +57,14 @@ export const LocalState = decoratorFactory(function(target, key, option) {
   const getter: any = option? option: key
   Object.defineProperty(target, key, {
     get: getLocalStateGetter(getter),
+  })
+})
+
+// tslint:disable-next-line
+export const State = decoratorFactory(function(target, key, option, namespace) {
+  const getter: any = option? option: key
+  Object.defineProperty(target, key, {
+    get: getStateGetter(getter, namespace, false),
   })
 })
 

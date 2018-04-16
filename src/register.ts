@@ -1,6 +1,6 @@
 import {cloneDeep, isNil} from 'lodash'
 import {Module, Store} from 'vuex'
-import {getNameSpace} from './module'
+import {joinNameSpace} from './module'
 import {sLocalStoreCounter, sLocalStoreStatus} from './symbols'
 import {ILocalStoreOptions, ISetModuleNameOptions, IStoreVue} from './type'
 import {getChannelName, getLocalStoreName, getLocalStoreState} from './util'
@@ -102,6 +102,6 @@ export const unregisterLocal = (vm: IStoreVue<any>) => {
   if(!isUsingSameStore || count < 0){
     const localStoreName: string = getLocalStoreName(vm)
     const localStoreChannelName: string = getChannelName(vm)
-    $store.unregisterModule(getNameSpace(localStoreName, localStoreChannelName))
+    $store.unregisterModule(joinNameSpace(localStoreName, localStoreChannelName))
   }
 }

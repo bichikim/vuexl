@@ -73,37 +73,35 @@ export {
 
 // let _Vue: Vue
 // noinspection JSUnusedGlobalSymbols
-let registered: boolean = false
+let registered: any
 export default {
   install(vue, options: IPluginOptions = {}) {
-    if(registered){
+    if(registered === vue){
       if(process.env.NODE_ENV !== 'production'){
         console.warn('[vuexl] install vuexl twice')
       }
     }
-    registered = true
     const {name, isNuxt = true} = options
-    // if(_Vue){
-    //   throw new Error('[Vuexl install] already installed')
-    // }
-    // _Vue = vue
-    if(isNuxt){
+    if(!registered){
+      if(isNuxt){
+        Component.registerHooks([
+          'beforeRouteEnter',
+          'beforeRouteLeave',
+          'asyncData',
+          'fetch',
+          'head',
+          'middleware',
+          'layout',
+          'transition',
+          'scrollToTop',
+          'validate',
+        ])
+      }
       Component.registerHooks([
-        'beforeRouteEnter',
-        'beforeRouteLeave',
-        'asyncData',
-        'fetch',
-        'head',
-        'middleware',
-        'layout',
-        'transition',
-        'scrollToTop',
-        'validate',
+        'localStore',
       ])
     }
-    Component.registerHooks([
-      'localStore',
-    ])
+    registered = vue
     vue.prototype[sLocalStoreChannelName] = name
     vue.prototype[sLocalStoreCounter] = {}
     vue.mixin({
@@ -127,10 +125,5 @@ interface IVuexlComponentOptions extends ComponentOptions<Vue>{
     options?: ISetLocalStoreOptions,
   }
 }
-
-// eslint-disable-next-line func-style
-// export function Component(options: IVuexlComponentOptions) {
-//   return vueComponent(options as ComponentOptions<Vue>)
-// }
 
 export {Component}

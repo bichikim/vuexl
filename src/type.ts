@@ -42,3 +42,5 @@ export interface ISetStateResult {
   name?: string
   options?: ISetModuleNameOptions
 }
+
+export type TDecoratorFactoryRunner = (target: any, key: string, ...args: any[]) => void

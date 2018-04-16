@@ -11,14 +11,18 @@ export const getModuleByNameSpace = (store: any, namespace, separator = '/') => 
   return module
 }
 
+export const joinNameSpace = (localStoreName, localStoreChannelName) => {
+  return localStoreChannelName ?
+    `${localStoreChannelName}/${localStoreName}` : localStoreName
+}
+
 export const getNameSpace = (vm: any, namespace: string | string[], isLocal: boolean = false) => {
   let myNameSpace
   if(isLocal){
     const localStoreName: string | undefined = getLocalStoreName(vm)
     if(!localStoreName){return}
     const localStoreChannelName: string = getChannelName(vm)
-    myNameSpace = localStoreChannelName ?
-      `${localStoreChannelName}/${localStoreName}` : localStoreName
+    myNameSpace = joinNameSpace(localStoreName, localStoreChannelName)
   }else if(isArray(namespace)){
     myNameSpace = namespace.join('/')
   }else{
