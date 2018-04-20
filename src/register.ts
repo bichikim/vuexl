@@ -31,7 +31,7 @@ export const getName = (
     numberingSeparator = '-',
   } = options
   const myLocalStoreName = localStoreName &&
-  isUsingName ? localStoreName : name
+    isUsingName ? localStoreName : name
   if(isUsingSameStore){
     // just counting
     getNameNumber(vm, myLocalStoreName)

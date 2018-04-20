@@ -3,6 +3,7 @@ import {createLocalVue, mount, shallow} from '@vue/test-utils'
 import {expect} from 'chai'
 import {Component, Vue} from 'vue-property-decorator'
 import Vuex from 'vuex'
+
 import Vuexl, {
   Component as LComponent, LocalAction, LocalGetter, LocalMutation,
   LocalState, LocalStore, mapLocalActions, mapLocalGetters,

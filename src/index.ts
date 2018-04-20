@@ -1,6 +1,6 @@
 import {isFunction} from 'lodash'
 import Vue, {ComponentOptions} from 'vue'
-import Component from 'vue-class-component'
+import vueComponent from 'vue-class-component'
 import {Module} from 'vuex'
 import {LocalAction, LocalGetter, LocalMutation, LocalState, LocalStore} from './decorators'
 import {
@@ -84,7 +84,7 @@ export default {
     const {name, isNuxt = true} = options
     if(!registered){
       if(isNuxt){
-        Component.registerHooks([
+        vueComponent.registerHooks([
           'beforeRouteEnter',
           'beforeRouteLeave',
           'asyncData',
@@ -97,7 +97,7 @@ export default {
           'validate',
         ])
       }
-      Component.registerHooks([
+      vueComponent.registerHooks([
         'localStore',
       ])
     }
@@ -126,4 +126,7 @@ interface IVuexlComponentOptions extends ComponentOptions<Vue>{
   }
 }
 
-export {Component}
+// eslint-disable-next-line func-style
+export function Component(options: IVuexlComponentOptions) {
+  return vueComponent(options as ComponentOptions<Vue>)
+}
