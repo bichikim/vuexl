@@ -151,7 +151,7 @@ describe('vuexl', () => {
   describe('vuexl: class way', () => {
     let store
     let localVue
-    let wrapper, wrapper2
+    let wrapper, wrapper2, noDecWrapper
     beforeEach(() => {
       localVue = createLocalVue()
       localVue.use(Vuex)
@@ -161,6 +161,21 @@ describe('vuexl', () => {
       })
     })
     const getWrapper = (options = {}) => {
+      // tslint:disable-next-line: max-classes-per-file
+      @Component({
+        render(h) {
+          return h('div')
+        },
+      })
+        // eslint-disable-next-line no-unused-vars
+      class ChildComponent extends Vue {
+        @LocalState((state) => (state.value)) foo: number
+
+        created() {
+          this.$store = store
+        }
+      }
+      // tslint:disable-next-line: max-classes-per-file
       @Component({
         render(h) {
           return h('div')
@@ -195,8 +210,29 @@ describe('vuexl', () => {
         }, options) vuexlTest: any
       }
 
+      // tslint:disable-next-line: max-classes-per-file
+      @LComponent({
+        render(h) {
+          return h('div')
+        },
+        localStore() {
+          return {
+            store: {
+              state: {
+                value: 1,
+              },
+            },
+            name: 'vuexlTest',
+          }
+        },
+      })
+      class VueNoDecComponent extends Vue {
+        @LocalState('value') foo: number
+      }
+
       wrapper = shallow(VueComponent, {store, localVue})
       wrapper2 = shallow(VueComponent, {store, localVue})
+      noDecWrapper = shallow(VueNoDecComponent, {store, localVue})
     }
 
     it('can set LocalStore', () => {
