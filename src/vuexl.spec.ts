@@ -148,9 +148,10 @@ describe('vuexl', () => {
     })
   })
 
-  describe('vuexl: class way' ,() => {
+  describe('vuexl: class way', () => {
     let store
     let localVue
+    let wrapper, wrapper2
     beforeEach(() => {
       localVue = createLocalVue()
       localVue.use(Vuex)
@@ -159,24 +160,47 @@ describe('vuexl', () => {
         state: {noValue: 1},
       })
     })
-    it('can set LocalStore', () => {
-      // tslint:disable-next-line: max-classes-per-file
+    const getWrapper = (options = {}) => {
       @Component({
         render(h) {
           return h('div')
         },
       })
-      class VuexlComponent extends Vue {
+      class VueComponent extends Vue {
         @LocalState('value') foo: number
+
+        @LocalMutation increase: () => void
+
+        @LocalAction('increase') actionIncrease: () => void
 
         @LocalStore({
           state: {
             value: 1,
           },
-        }) vuexlTest: string
+          actions: {
+            increase({commit}) {
+              commit('increase')
+            },
+          },
+          mutations: {
+            increase(state) {
+              state.value += 1
+            },
+          },
+          getters: {
+            opposite: (state) => {
+              return state.value * -1
+            },
+          },
+        }, options) vuexlTest: any
       }
 
-      const wrapper = shallow(VuexlComponent, {store, localVue})
+      wrapper = shallow(VueComponent, {store, localVue})
+      wrapper2 = shallow(VueComponent, {store, localVue})
+    }
+
+    it('can set LocalStore', () => {
+      getWrapper()
 
       expect(wrapper.vm.foo).to.equal(1)
       expect(wrapper.vm[sLocalStoreStatus].localName).to.equal('vuexlTest-0')
@@ -199,388 +223,92 @@ describe('vuexl', () => {
           }
         },
       })
-      class VuexlComponent extends Vue {
+      class Vue2Component extends Vue {
         @LocalState('value') foo: number
       }
 
-      const wrapper = shallow(VuexlComponent, {store, localVue})
+      const wrapper = shallow(Vue2Component, {store, localVue})
 
       expect(wrapper.vm.foo).to.equal(1)
       expect(wrapper.vm[sLocalStoreStatus].localName).to.equal('vuexlTest-0')
     })
 
     it('can set LocalStore: no use key name', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState('value') foo: number
-
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-        }, {
-          isUsingName: false,
-        }) vuexlTest: string
-      }
-
-      const wrapper = shallow(VuexlComponent,{store, localVue})
+      getWrapper({isUsingName: false})
 
       expect(wrapper.vm.foo).to.equal(1)
       expect(wrapper.vm[sLocalStoreStatus].localName).to.equal('VuexlComponent-0')
     })
 
     it('can set LocalStore: instances from same class use same Store', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState('value') foo: number
+      getWrapper({isUsingSameStore: true})
 
-        @LocalMutation increase: () => void
-
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-          mutations: {
-            increase(state) {
-              state.value += 1
-            },
-          },
-        }, {
-          isUsingSameStore: true,
-        }) vuexlTest: string
-
-        // noinspection JSUnusedGlobalSymbols
-        created() {
-          this.increase()
-        }
-      }
-
-      const component = shallow(VuexlComponent,{store, localVue})
-      const component2 = shallow(VuexlComponent,{store, localVue})
-
-      expect(component.vm.foo).to.equal(3)
-      expect(component2.vm.foo).to.equal(3)
-      expect(component.vm[sLocalStoreStatus].localName).to.equal('vuexlTest')
+      expect(wrapper.vm.foo).to.equal(3)
+      expect(wrapper2.vm.foo).to.equal(3)
+      expect(wrapper.vm[sLocalStoreStatus].localName).to.equal('vuexlTest')
     })
 
     it('can set LocalStore: instances from same class do not use same Store', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState('value') foo: number
+      getWrapper({isUsingSameStore: false})
 
-        @LocalMutation increase: () => void
-
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-          mutations: {
-            increase(state) {
-              state.value += 1
-            },
-          },
-        }, {
-          isUsingSameStore: false,
-        }) vuexlTest: string
-
-        // noinspection JSUnusedGlobalSymbols
-        created() {
-          this.increase()
-        }
-      }
-
-      const component = shallow(VuexlComponent,{store, localVue})
-      const component2 = shallow(VuexlComponent,{store, localVue})
-
-      expect(component.vm.foo).to.equal(2)
-      expect(component2.vm.foo).to.equal(2)
-      expect(component.vm[sLocalStoreStatus].localName).to.equal('vuexlTest-0')
-      expect(component2.vm[sLocalStoreStatus].localName).to.equal('vuexlTest-1')
+      expect(wrapper.vm.foo).to.equal(2)
+      expect(wrapper2.vm.foo).to.equal(2)
+      expect(wrapper.vm[sLocalStoreStatus].localName).to.equal('vuexlTest-0')
+      expect(wrapper2.vm[sLocalStoreStatus].localName).to.equal('vuexlTest-1')
     })
 
     it('can decorate LocalState: key', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState value: number
+      getWrapper()
 
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-        }) vuexlTest: string
-      }
-
-      const component = shallow(VuexlComponent, {store, localVue})
-
-      expect(component.vm.value).to.equal(1)
+      expect(wrapper.vm.value).to.equal(1)
     })
 
     it('can decorate LocalState: string', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState('value') foo: number
+      getWrapper()
 
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-        }) vuexlTest: string
-      }
-
-      const component = shallow(VuexlComponent, {store, localVue})
-
-      expect(component.vm.foo).to.equal(1)
+      expect(wrapper.vm.foo).to.equal(1)
     })
 
     it('can decorate LocalState: function', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState((state) => (state.value)) foo: number
+      getWrapper()
 
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-        }) vuexlTest: string
-      }
-
-      const component = shallow(VuexlComponent, {store, localVue})
-
-      expect(component.vm.foo).to.equal(1)
+      expect(wrapper.vm.foo).to.equal(1)
     })
 
     it('can decorate LocalAction: key', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState((state) => (state.value)) foo: number
+      getWrapper()
 
-        @LocalAction increase: () => void
-
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-          actions: {
-            increase({commit}) {
-              commit('increase')
-            },
-          },
-          mutations: {
-            increase(state) {
-              state.value += 1
-            },
-          },
-        }) vuexlTest: string
-
-        // noinspection JSUnusedGlobalSymbols
-        created() {
-          this.increase()
-        }
-      }
-
-      const component = shallow(VuexlComponent, {store, localVue})
-
-      expect(component.vm.foo).to.equal(2)
+      expect(wrapper.vm.foo).to.equal(2)
     })
 
     it('can decorate LocalAction: string', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState((state) => (state.value)) foo: number
+      getWrapper()
 
-        @LocalAction('increase') bar: () => void
-
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-          actions: {
-            increase({commit}) {
-              commit('increase')
-            },
-          },
-          mutations: {
-            increase(state) {
-              state.value += 1
-            },
-          },
-        }) vuexlTest: string
-
-        // noinspection JSUnusedGlobalSymbols
-        created() {
-          this.bar()
-        }
-      }
-
-      const component = shallow(VuexlComponent, {store, localVue})
-
-      expect(component.vm.foo).to.equal(2)
+      expect(wrapper.vm.foo).to.equal(2)
     })
 
     it('can decorate LocalMutation: key', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState((state) => (state.value)) foo: number
+      getWrapper()
 
-        @LocalMutation increase: () => void
-
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-          mutations: {
-            increase(state) {
-              state.value += 1
-            },
-          },
-        }) vuexlTest: string
-
-        // noinspection JSUnusedGlobalSymbols
-        created() {
-          this.increase()
-        }
-      }
-
-      const component = shallow(VuexlComponent, {store, localVue})
-
-      expect(component.vm.foo).to.equal(2)
+      expect(wrapper.vm.foo).to.equal(2)
     })
 
     it('can decorate LocalMutation: string', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState((state) => (state.value)) foo: number
+      getWrapper()
 
-        @LocalMutation('increase') bar: () => void
-
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-          mutations: {
-            increase(state) {
-              state.value += 1
-            },
-          },
-        }) vuexlTest: string
-
-        // noinspection JSUnusedGlobalSymbols
-        created() {
-          this.bar()
-        }
-      }
-
-      const component = shallow(VuexlComponent, {store, localVue})
-
-      expect(component.vm.foo).to.equal(2)
+      expect(wrapper.vm.foo).to.equal(2)
     })
 
     it('can decorate LocalGetter: string', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState((state) => (state.value)) foo: number
+      getWrapper()
 
-        @LocalGetter('ma') bar: number
-
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-          getters: {
-            ma: (state) => {
-              return state.value * -1
-            },
-          },
-        }) vuexlTest: string
-      }
-
-      const component = shallow(VuexlComponent, {store, localVue})
-
-      expect(component.vm.bar).to.equal(-1)
+      expect(wrapper.vm.bar).to.equal(-1)
     })
 
     it('can decorate LocalGetter: key', () => {
-      // tslint:disable-next-line: max-classes-per-file
-      @Component({
-        render(h) {
-          return h('div')
-        },
-      })
-      class VuexlComponent extends Vue {
-        @LocalState((state) => (state.value)) foo: number
+      getWrapper()
 
-        @LocalGetter ma: number
-
-        @LocalStore({
-          state: {
-            value: 1,
-          },
-          getters: {
-            ma: (state) => {
-              return state.value * -1
-            },
-          },
-        }) vuexlTest: string
-      }
-
-      const component = shallow(VuexlComponent, {store, localVue})
-
-      expect(component.vm.ma).to.equal(-1)
+      expect(wrapper.vm.ma).to.equal(-1)
     })
     it('can destroy', () => {
       // tslint:disable-next-line: max-classes-per-file
@@ -619,27 +347,30 @@ describe('vuexl', () => {
 
     it('can use parent store', () => {
       let child
+
       // tslint:disable-next-line: max-classes-per-file
       @Component({
         render(h) {
           return h('div')
         },
       })
-      // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
       class ChildComponent extends Vue {
         @LocalState((state) => (state.value)) foo: number
+
         created() {
           this.$store = store
           // eslint-disable-next-line consistent-this
           child = this
         }
       }
+
       // tslint:disable-next-line: max-classes-per-file
       @Component({
         render(h) {
-        return h(ChildComponent)
+          return h(ChildComponent)
         },
-        })
+      })
       class VuexlComponent extends Vue {
         @LocalState((state) => (state.value)) foo: number
 
@@ -661,6 +392,7 @@ describe('vuexl', () => {
           },
         }) vuexlTest: string
       }
+
       const component = mount(VuexlComponent, {store, localVue})
       component.vm.increase()
       // this test is not working need to find some solution

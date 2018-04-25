@@ -2,7 +2,13 @@ import {isFunction} from 'lodash'
 import Vue, {ComponentOptions} from 'vue'
 import vueComponent from 'vue-class-component'
 import {Module} from 'vuex'
-import {LocalAction, LocalGetter, LocalMutation, LocalState, LocalStore} from './decorators'
+import {
+  LocalAction,
+  LocalGetter,
+  LocalMutation,
+  LocalState,
+  LocalStore,
+} from './decorators'
 import {
   mapLocalActions, mapLocalGetters, mapLocalMutations, mapLocalState, setLocalStore,
 } from './map-helper'

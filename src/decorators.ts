@@ -4,6 +4,7 @@ import {
   getLocalGetterGetter,
   getLocalMutationGetter,
   getLocalStateGetter,
+  getLocalStoreGetter,
   getStateGetter,
 } from './module'
 import {
@@ -30,6 +31,9 @@ export function LocalStore(
           options,
         }
       },
+    })
+    Object.defineProperty(target, key, {
+      get: getLocalStoreGetter(key),
     })
   }
 }

@@ -31,6 +31,14 @@ export const getNameSpace = (vm: any, namespace: string | string[], isLocal: boo
   return myNameSpace
 }
 
+export const getLocalStoreGetter = (getter?: TGetterGetter) => {
+  return function() {
+    const {$store, $isServer} = this
+    if(!$store || $isServer || !getter){return}
+    return getModuleByNameSpace($store, getNameSpace(this, null, true))
+  }
+}
+
 export const getStateGetter = (
   getter?: TStateGetter,
   namespace?: string | string[],
